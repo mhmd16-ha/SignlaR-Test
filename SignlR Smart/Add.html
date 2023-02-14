@@ -28,23 +28,46 @@
             //define connection
             var con = $.hubConnection();
             //create proxy
-             prox = con.createHubProxy("chat");
+            prox = con.createHubProxy("chat");
+            
             //start connection
             con.start();
             //Subscribe Callback newMessage
             prox.on("newMessage", function (m) {
                 $("ul").append("<li>" + m.name + ": " + m.message + "</li>")
             })
+            prox.on("newMember", function (n,g) {
+                $("ul").append("<li><i>" + n + "join to" + g + "</i></li>")
+            })
+            prox.on("group", function (a,d) {
+                $("ul").append("<li><b>" + a + ":" + d + "</b></li>")
+            })
         })
         function send() {
             //prox.invoke("sendMessage",name, $("#txt").val())
             prox.invoke("sendMessage", { name: name,message: $("#txt").val() })
         }
+        function join() {
+            //prox.invoke("sendMessage",name, $("#txt").val())
+            prox.invoke("joinMember", $("#txt2").val(),name)
+        }
+        function sendGroup() {
+            //prox.invoke("sendMessage",name, $("#txt").val())
+            prox.invoke("sendGroup", $("#txt2").val() ,name, $("#txt").val())
+        }
     </script>
 </head>
 <body>
     <input type="text" id="txt" />
-    <input type="button" value="send" onclick="send()"/>
+    <input type="button" value="send" onclick="send()" />
+    <hr />
+
+    <input type="text" id="txt2" />
+    <input type="button" value="join" onclick="join()" />
+
+    <input type="button" value="send a group" onclick="sendGroup()" />
+
+
 
     <ul>
         <li>message</li>

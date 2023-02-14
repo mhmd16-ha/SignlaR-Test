@@ -29,6 +29,17 @@ namespace SignlR_Smart
             db.Messages.Add(m);
             db.SaveChanges();
             }
-        
+        public void joinMember(string gname,string name)
+        {
+            Groups.Add(Context.ConnectionId, gname);
+            Clients.OthersInGroup(gname).newMember(name, gname);
+        }
+        public void sendGroup(string gname, string message, string name)
+        {
+            //save db
+
+            Clients.Group(gname).group(name, message,gname);
+        }
+
     }
 }
